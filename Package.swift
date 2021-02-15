@@ -12,13 +12,15 @@ let package = Package(
             targets: ["TwisterCore"])
     ],
     dependencies: [
-        .package(url: "https://github.com/amraboelela/SwiftLevelDB", .branch("master")),
+        .package(url: "https://github.com/amraboelela/SwiftBoost", .branch("master")),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(name: "TwisterCore", dependencies: ["twisterd"]),
-        .target(name: "twisterd", dependencies: ["SwiftLevelDB"]),
+        .target(name: "twisterd", dependencies: ["bitcoin"]),
+        .target(name: "bitcoin", dependencies: ["SwiftBoost"]),
+        //.target(name: "bitcoin", dependencies: ["SwiftLevelDB"]),
         .testTarget(name: "TwisterCoreTests", dependencies: ["TwisterCore"]),
     ]
 )
