@@ -6,21 +6,17 @@ import PackageDescription
 let package = Package(
     name: "TwisterCore",
     products: [
-        // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
             name: "TwisterCore",
             targets: ["TwisterCore"])
     ],
     dependencies: [
-        .package(url: "https://github.com/amraboelela/SwiftBoost", .branch("master")),
+        .package(url: "https://github.com/amraboelela/boost", .branch("main")),
+        .package(url: "https://github.com/amraboelela/openssl", .branch("master")),
+        .package(url: "https://github.com/amraboelela/leveldb", .branch("main")),
+        .package(url: "https://github.com/amraboelela/berkeleydb", .branch("master")),
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages which this package depends on.
-        .target(name: "TwisterCore", dependencies: ["twisterd"]),
-        .target(name: "twisterd", dependencies: ["bitcoin"]),
-        .target(name: "bitcoin", dependencies: ["SwiftBoost"]),
-        //.target(name: "bitcoin", dependencies: ["SwiftLevelDB"]),
-        .testTarget(name: "TwisterCoreTests", dependencies: ["TwisterCore"]),
+        .target(name: "TwisterCore", dependencies: ["boost", "openssl", "leveldb", "berkeleydb"]),
     ]
 )
