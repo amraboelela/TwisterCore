@@ -4,11 +4,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "TwisterCore",
+    name: "twistercore",
     products: [
         .library(
-            name: "TwisterCore",
-            targets: ["TwisterCore"])
+            name: "twistercore",
+            targets: ["twistercore"])
     ],
     dependencies: [
         .package(url: "https://github.com/amraboelela/boost", .branch("main")),
@@ -16,7 +16,7 @@ let package = Package(
         .package(url: "https://github.com/amraboelela/leveldb", .branch("main")),
     ],
     targets: [
-        .target(name: "TwisterCore", dependencies: ["boost", "openssl", "leveldb", "memenv"]),
+        .target(name: "twistercore", dependencies: ["boost", "openssl", "leveldb", "memenv"]),
         .target(name: "memenv", dependencies: ["leveldb"]),
     ]
 )
