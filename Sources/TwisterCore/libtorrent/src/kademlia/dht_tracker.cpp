@@ -55,7 +55,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "libtorrent/version.hpp"
 #include "libtorrent/escape_string.hpp"
 
-#include "../../../src/util.h"
+#include "util.h"
 
 using boost::ref;
 using libtorrent::dht::node_impl;

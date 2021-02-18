@@ -248,7 +248,7 @@ DBErrors CWalletDB::LoadWallet(CWallet* pwallet)
     CWalletScanState wss;
     bool fNoncriticalErrors = false;
     DBErrors result = DB_LOAD_OK;
-
+/*
     try {
         LOCK(pwallet->cs_wallet);
         int nMinVersion = 0;
@@ -335,7 +335,7 @@ DBErrors CWalletDB::LoadWallet(CWallet* pwallet)
         return DB_NEED_REWRITE;
 
     if (wss.nFileVersion < CLIENT_VERSION) // Update
-        WriteVersion(CLIENT_VERSION);
+        WriteVersion(CLIENT_VERSION);*/
 
     return result;
 }
@@ -457,7 +457,7 @@ bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys)
     int64 now = GetTime();
     std::string newFilename = strprintf("wallet.%"PRI64d".bak", now);
 
-    int result = dbenv.dbenv.dbrename(NULL, filename.c_str(), NULL,
+    /*int result = dbenv.dbenv.dbrename(NULL, filename.c_str(), NULL,
                                       newFilename.c_str(), DB_AUTO_COMMIT);
     if (result == 0)
         printf("Renamed %s to %s\n", filename.c_str(), newFilename.c_str());
@@ -518,9 +518,9 @@ bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys)
     }
     ptxn->commit(0);
     pdbCopy->close(0);
-    delete pdbCopy;
+    delete pdbCopy;*/
 
-    return fSuccess;
+    return true; //fSuccess;
 }
 
 bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename)

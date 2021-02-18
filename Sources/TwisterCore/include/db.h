@@ -19,7 +19,7 @@
 //#ifdef DB_CXX_HEADER
 //  #include DB_CXX_HEADER
 //#else
-#include <berkeleydb/db_cxx.h>
+//#include <berkeleydb/db.h>
 //#endif
 
 class CAddrMan;
@@ -34,7 +34,6 @@ extern unsigned int nWalletDBUpdated;
 void ThreadFlushWalletDB(const std::string& strWalletFile);
 bool BackupWallet(const CWallet& wallet, const std::string& strDest);
 
-
 class CDBEnv
 {
 private:
@@ -46,9 +45,9 @@ private:
 
 public:
     mutable CCriticalSection cs_db;
-    DbEnv dbenv;
+    //DbEnv dbenv;
     std::map<std::string, int> mapFileUseCount;
-    std::map<std::string, Db*> mapDb;
+    //std::map<std::string, Db*> mapDb;
 
     CDBEnv();
     ~CDBEnv();
@@ -81,14 +80,14 @@ public:
     void CloseDb(const std::string& strFile);
     bool RemoveDb(const std::string& strFile);
 
-    DbTxn *TxnBegin(int flags=DB_TXN_WRITE_NOSYNC)
+    /*DbTxn *TxnBegin(int flags=DB_TXN_WRITE_NOSYNC)
     {
         DbTxn* ptxn = NULL;
         int ret = dbenv.txn_begin(NULL, &ptxn, flags);
         if (!ptxn || ret != 0)
             return NULL;
         return ptxn;
-    }
+    }*/
 };
 
 extern CDBEnv bitdb;
@@ -98,37 +97,37 @@ extern CDBEnv bitdb;
 class CDB
 {
 protected:
-    Db* pdb;
+    //Db* pdb;
     std::string strFile;
-    DbTxn *activeTxn;
+    //DbTxn *activeTxn;
     bool fReadOnly;
 
-    explicit CDB(const char* pszFile, const char* pszMode="r+");
+    //explicit CDB(const char* pszFile, const char* pszMode="r+");
     ~CDB() { Close(); }
 public:
     void Flush();
     void Close();
 private:
-    CDB(const CDB&);
+    //CDB(const CDB&);
     void operator=(const CDB&);
 
 protected:
     template<typename K, typename T>
     bool Read(const K& key, T& value)
     {
-        if (!pdb)
-            return false;
+        //if (!pdb)
+        //    return false;
 
         // Key
         CDataStream ssKey(SER_DISK, CLIENT_VERSION);
         ssKey.reserve(1000);
         ssKey << key;
-        Dbt datKey(&ssKey[0], ssKey.size());
+        //Dbt datKey(&ssKey[0], ssKey.size());
 
         // Read
-        Dbt datValue;
-        datValue.set_flags(DB_DBT_MALLOC);
-        int ret = pdb->get(activeTxn, &datKey, &datValue, 0);
+        //Dbt datValue;
+        /*datValue.set_flags(DB_DBT_MALLOC);
+        //int ret = pdb->get(activeTxn, &datKey, &datValue, 0);
         memset(datKey.get_data(), 0, datKey.get_size());
         if (datValue.get_data() == NULL)
             return false;
@@ -145,13 +144,14 @@ protected:
         // Clear and free memory
         memset(datValue.get_data(), 0, datValue.get_size());
         free(datValue.get_data());
-        return (ret == 0);
+        return (ret == 0);*/
+        return true;
     }
 
     template<typename K, typename T>
     bool Write(const K& key, const T& value, bool fOverwrite=true)
     {
-        if (!pdb)
+        /*if (!pdb)
             return false;
         if (fReadOnly)
             assert(!"Write called on database in read-only mode");
@@ -160,27 +160,28 @@ protected:
         CDataStream ssKey(SER_DISK, CLIENT_VERSION);
         ssKey.reserve(1000);
         ssKey << key;
-        Dbt datKey(&ssKey[0], ssKey.size());
+        //Dbt datKey(&ssKey[0], ssKey.size());
 
         // Value
         CDataStream ssValue(SER_DISK, CLIENT_VERSION);
         ssValue.reserve(10000);
         ssValue << value;
-        Dbt datValue(&ssValue[0], ssValue.size());
+        //Dbt datValue(&ssValue[0], ssValue.size());
 
         // Write
-        int ret = pdb->put(activeTxn, &datKey, &datValue, (fOverwrite ? 0 : DB_NOOVERWRITE));
+        //int ret = pdb->put(activeTxn, &datKey, &datValue, (fOverwrite ? 0 : DB_NOOVERWRITE));
 
         // Clear memory in case it was a private key
         memset(datKey.get_data(), 0, datKey.get_size());
         memset(datValue.get_data(), 0, datValue.get_size());
-        return (ret == 0);
+        return (ret == 0);*/
+        return true;
     }
 
     template<typename K>
     bool Erase(const K& key)
     {
-        if (!pdb)
+        /*if (!pdb)
             return false;
         if (fReadOnly)
             assert(!"Erase called on database in read-only mode");
@@ -189,20 +190,21 @@ protected:
         CDataStream ssKey(SER_DISK, CLIENT_VERSION);
         ssKey.reserve(1000);
         ssKey << key;
-        Dbt datKey(&ssKey[0], ssKey.size());
+        //Dbt datKey(&ssKey[0], ssKey.size());
 
         // Erase
         int ret = pdb->del(activeTxn, &datKey, 0);
 
         // Clear memory
         memset(datKey.get_data(), 0, datKey.get_size());
-        return (ret == 0 || ret == DB_NOTFOUND);
+        return (ret == 0 || ret == DB_NOTFOUND);*/
+        return true;
     }
 
     template<typename K>
     bool Exists(const K& key)
     {
-        if (!pdb)
+        /*if (!pdb)
             return false;
 
         // Key
@@ -216,10 +218,11 @@ protected:
 
         // Clear memory
         memset(datKey.get_data(), 0, datKey.get_size());
-        return (ret == 0);
+        return (ret == 0);*/
+        return true;
     }
 
-    Dbc* GetCursor()
+    /*Dbc* GetCursor()
     {
         if (!pdb)
             return NULL;
@@ -267,36 +270,36 @@ protected:
         free(datKey.get_data());
         free(datValue.get_data());
         return 0;
-    }
+    }*/
 
 public:
     bool TxnBegin()
     {
-        if (!pdb || activeTxn)
+        /*if (!pdb || activeTxn)
             return false;
         DbTxn* ptxn = bitdb.TxnBegin();
         if (!ptxn)
             return false;
         activeTxn = ptxn;
-        return true;
+        return true;*/
     }
 
     bool TxnCommit()
     {
-        if (!pdb || !activeTxn)
+        /*if (!pdb || !activeTxn)
             return false;
         int ret = activeTxn->commit(0);
         activeTxn = NULL;
-        return (ret == 0);
+        return (ret == 0);*/
     }
 
     bool TxnAbort()
     {
-        if (!pdb || !activeTxn)
+        /*if (!pdb || !activeTxn)
             return false;
         int ret = activeTxn->abort();
         activeTxn = NULL;
-        return (ret == 0);
+        return (ret == 0);*/
     }
 
     bool ReadVersion(int& nVersion)

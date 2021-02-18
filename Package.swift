@@ -14,9 +14,10 @@ let package = Package(
         .package(url: "https://github.com/amraboelela/boost", .branch("main")),
         .package(url: "https://github.com/amraboelela/openssl", .branch("master")),
         .package(url: "https://github.com/amraboelela/leveldb", .branch("main")),
-        .package(url: "https://github.com/amraboelela/berkeleydb", .branch("master")),
+        //.package(url: "https://github.com/amraboelela/berkeleydb", .branch("master")),
     ],
     targets: [
-        .target(name: "TwisterCore", dependencies: ["boost", "openssl", "leveldb", "berkeleydb"]),
+        .target(name: "TwisterCore", dependencies: ["boost", "openssl", "leveldb", "memenv"]),
+        .target(name: "memenv", dependencies: ["leveldb"]),
     ]
 )
