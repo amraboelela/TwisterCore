@@ -2,8 +2,8 @@
 #define TWISTER_UTILS_H
 
 #include "json/json_spirit.h"
-//#include "libtorrent/entry.hpp"
-//#include "libtorrent/peer_id.hpp"
+#include "libtorrent/entry.hpp"
+#include "libtorrent/peer_id.hpp"
 
 #include <string>
 #include <vector>
@@ -67,7 +67,7 @@ std::string safeGetEntryString(libtorrent::entry const &e, std::string const& ke
 int safeGetEntryInt(libtorrent::entry const &e, std::string const& key);
 libtorrent::entry safeGetEntryDict(libtorrent::entry const &e, std::string const& key);
 
-//libtorrent::sha1_hash dhtTargetHash(std::string const &username, std::string const &resource, std::string const &type);
+libtorrent::sha1_hash dhtTargetHash(std::string const &username, std::string const &resource, std::string const &type);
 
 std::string getRandomGroupAlias();
 
