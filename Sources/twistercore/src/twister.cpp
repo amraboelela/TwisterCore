@@ -36,21 +36,21 @@ twister::twister()
 #include "libtorrent/alert_types.hpp"
 
 #define TORRENT_DISABLE_GEO_IP
-//#include "libtorrent/aux_/session_impl.hpp"
+#include "libtorrent/aux_/session_impl.hpp"
 
 #define DEBUG_ACCEPT_POST 1
 //#define DEBUG_EXPIRE_DHT_ITEM 1
 //#define DEBUG_MAINTAIN_DHT_NODES 1
 //#define DEBUG_NEIGHBOR_TORRENT 1
 
-/*using namespace libtorrent;
-static boost::shared_ptr<session> m_ses;
+using namespace libtorrent;
+/*static boost::shared_ptr<session> m_ses;
 static bool m_shuttingDownSession = false;
 static bool m_usingProxy;
 static int num_outstanding_resume_data;
 
 static CCriticalSection cs_dhtgetMap;
-static map<sha1_hash, std::list<alert_manager*> > m_dhtgetMap;
+static map<sha1_hash, std::list<alert_manager*> > m_dhtgetMap;*/
 
 static CCriticalSection cs_twister;
 static map<std::string, bool> m_specialResources;
@@ -84,7 +84,7 @@ const double hashtagAgingFactor   = pow(0.5, hashtagTimerInterval/hashtagHalfLif
 const double hashtagCriticalValue = pow(0.5, hashtagExpiration/hashtagHalfLife);
 
 const char*  msgTokensDelimiter  = " \n\t.,:/?!;'\"()[]{}*";
-*/
+
 
 class SimpleThreadCounter {
 public:
@@ -195,7 +195,7 @@ torrent_handle startTorrentUser(std::string const &username, bool following, int
         h.resume();
     }
     return h;
-}
+}*/
 
 torrent_handle getTorrentUser(std::string const &username)
 {
@@ -206,6 +206,7 @@ torrent_handle getTorrentUser(std::string const &username)
         return torrent_handle();
 }
 
+/*
 int torrentLastHave(std::string const &username)
 {
     torrent_handle h = getTorrentUser(username);
@@ -1962,7 +1963,7 @@ void updateSeenHashtags(std::string &message, int64_t msgTime)
             }
         }
     }
-}
+}*/
 
 entry formatSpamPost(const string &msg, const string &username, uint64_t utcTime = 0, int height = 0)
 {
@@ -1979,7 +1980,7 @@ entry formatSpamPost(const string &msg, const string &username, uint64_t utcTime
     return v;
 }
 
-
+/*
 void dhtGetData(std::string const &username, std::string const &resource, bool multi, bool local)
 {
     if( DhtProxy::fEnabled ) {
@@ -2660,7 +2661,7 @@ Value getposts(const Array& params, bool fHelp)
     Array users        = params[1].get_array();
     int allowed_flags  = (params.size() > 2) ? params[2].get_int() : USERPOST_FLAG_HOME;
     int required_flags = (params.size() > 3) ? params[3].get_int() : 0;
-/*
+
     std::multimap<int64,entry> postsByTime;
 
     for( unsigned int u = 0; u < users.size(); u++ ) {
@@ -2700,10 +2701,10 @@ Value getposts(const Array& params, bool fHelp)
                 }
             }
         }
-    }*/
+    }
 
     Array ret;
-    /*std::multimap<int64,entry>::reverse_iterator rit;
+    std::multimap<int64,entry>::reverse_iterator rit;
     for (rit=postsByTime.rbegin(); rit!=postsByTime.rend() && (int)ret.size() < count; ++rit) {
         ret.push_back( entryToJson(rit->second) );
     }
@@ -2721,7 +2722,7 @@ Value getposts(const Array& params, bool fHelp)
             m_receivedSpamMsgStr = "";
             m_receivedSpamUserStr = "";
         }
-    }*/
+    }
     return ret;
 }
 
