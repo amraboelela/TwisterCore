@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2003-2012, Arvid Norberg
+Copyright (c) 2006-2012, Arvid Norberg & Daniel Wallin
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -30,40 +30,26 @@ POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#ifndef TORRENT_HASHER_HPP_INCLUDED
-#define TORRENT_HASHER_HPP_INCLUDED
+#include "libtorrent/kademlia/logging.hpp"
+#include "libtorrent/time.hpp"
 
-#include <boost/cstdint.hpp>
-
-#include "libtorrent/peer_id.hpp"
-#include "libtorrent/config.hpp"
-#include "libtorrent/assert.hpp"
-
-extern "C"
+namespace libtorrent { namespace dht
 {
-#include <openssl/sha.h>
-}
+	log_event::log_event(log& log) 
+		: log_(log) 
+	{
+		if (log_.enabled())
+			log_ << time_now_string() << " [" << log.id() << "] ";
+	}
 
-namespace libtorrent
-{
-    class TORRENT_EXTRA_EXPORT hasher
-    {
-    public:
+	log_event::~log_event()
+	{
+		if (log_.enabled())
+		{
+			log_ << "\n";
+			log_.flush();
+		}
+	}
 
-        hasher();
-        hasher(const char* data, int len);
-
-        void update(std::string const& data) { update(data.c_str(), data.size()); }
-        void update(const char* data, int len);
-        sha1_hash final();
-
-        void reset();
-
-    private:
-
-        SHA_CTX m_context;
-    };
-}
-
-#endif // TORRENT_HASHER_HPP_INCLUDED
+}}
 

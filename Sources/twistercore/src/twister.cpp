@@ -44,13 +44,13 @@ twister::twister()
 //#define DEBUG_NEIGHBOR_TORRENT 1
 
 using namespace libtorrent;
-/*static boost::shared_ptr<session> m_ses;
+static boost::shared_ptr<session> m_ses;
 static bool m_shuttingDownSession = false;
 static bool m_usingProxy;
 static int num_outstanding_resume_data;
 
 static CCriticalSection cs_dhtgetMap;
-static map<sha1_hash, std::list<alert_manager*> > m_dhtgetMap;*/
+static map<sha1_hash, std::list<alert_manager*> > m_dhtgetMap;
 
 static CCriticalSection cs_twister;
 static map<std::string, bool> m_specialResources;
@@ -109,7 +109,6 @@ private:
 #define GLOBAL_DATA_FILE "global_data"
 #define GROUP_DATA_FILE "group_data"
 
-/*
 void dhtgetMapAdd(sha1_hash &ih, alert_manager *am)
 {
     LOCK(cs_dhtgetMap);
@@ -195,7 +194,7 @@ torrent_handle startTorrentUser(std::string const &username, bool following, int
         h.resume();
     }
     return h;
-}*/
+}
 
 torrent_handle getTorrentUser(std::string const &username)
 {
@@ -1108,8 +1107,7 @@ std::string createSignature(std::string const &strMessage, std::string const &st
     }
 
     return createSignature( strMessage, keyID );
-}
-
+}*/
 
 bool getUserPubKey(std::string const &strUsername, CPubKey &pubkey, int maxHeight)
 {
@@ -1818,8 +1816,7 @@ bool createDirectMessage(entry &dm, std::string const &to, std::string const &ms
     return encrypted;
 }
 
-int getBestHeight()
-{
+int getBestHeight() {
     return nBestHeight;
 }
 
@@ -1898,6 +1895,7 @@ bool shouldDhtResourceExpire(std::string resource, bool multi, int height)
     return false;
 }
 
+/*
 void receivedSpamMessage(std::string const &message, std::string const &user)
 {
     LOCK(cs_spamMsg);
@@ -1980,7 +1978,6 @@ entry formatSpamPost(const string &msg, const string &username, uint64_t utcTime
     return v;
 }
 
-/*
 void dhtGetData(std::string const &username, std::string const &resource, bool multi, bool local)
 {
     if( DhtProxy::fEnabled ) {
@@ -2646,7 +2643,7 @@ Value newfavmsg(const Array& params, bool fHelp)
 
     hexcapePost(v);
     return entryToJson(v);
-}*/
+}
 
 Value getposts(const Array& params, bool fHelp)
 {
@@ -2726,7 +2723,6 @@ Value getposts(const Array& params, bool fHelp)
     return ret;
 }
 
-/*
 Value getdirectmsgs(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 3)
@@ -3010,6 +3006,7 @@ Value getspammsg(const Array& params, bool fHelp)
     return ret;
 }
 
+/*
 Value setpreferredspamlang(const Array& params, bool fHelp)
 {
     if (fHelp || (params.size() != 1))
@@ -3942,7 +3939,7 @@ Value creategroup(const Array& params, bool fHelp)
     registerNewGroup(privKey, strDescription, noMember, noMember, GetTime(), -1);
 
     return getGroupAliasByKey(privKey);
-}
+}*/
 
 Value listgroups(const Array& params, bool fHelp)
 {
@@ -3980,6 +3977,7 @@ Value listgroups(const Array& params, bool fHelp)
     return ret;
 }
 
+/*
 Value getgroupinfo(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
@@ -4145,7 +4143,7 @@ Value newgroupdescription(const Array& params, bool fHelp)
     signAndAddDM(strFrom, k++, &dmInvite);
 
     return Value();
-}
+}*/
 
 Value leavegroup(const Array& params, bool fHelp)
 {
@@ -4171,7 +4169,7 @@ Value leavegroup(const Array& params, bool fHelp)
     return Value();
 }
 
-
+/*
 Value getpieceavailability(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 2 )

@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2003-2012, Arvid Norberg
+Copyright (c) 2005-2012, Arvid Norberg
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -30,40 +30,71 @@ POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#ifndef TORRENT_HASHER_HPP_INCLUDED
-#define TORRENT_HASHER_HPP_INCLUDED
+#include "libtorrent/pch.hpp"
 
-#include <boost/cstdint.hpp>
+#include "libtorrent/ip_filter.hpp"
+#include <boost/utility.hpp>
 
-#include "libtorrent/peer_id.hpp"
-#include "libtorrent/config.hpp"
-#include "libtorrent/assert.hpp"
-
-extern "C"
-{
-#include <openssl/sha.h>
-}
 
 namespace libtorrent
 {
-    class TORRENT_EXTRA_EXPORT hasher
-    {
-    public:
+	void ip_filter::add_rule(address first, address last, int flags)
+	{
+		if (first.is_v4())
+		{
+			TORRENT_ASSERT(last.is_v4());
+			m_filter4.add_rule(first.to_v4().to_bytes(), last.to_v4().to_bytes(), flags);
+		}
+#if TORRENT_USE_IPV6
+		else if (first.is_v6())
+		{
+			TORRENT_ASSERT(last.is_v6());
+			m_filter6.add_rule(first.to_v6().to_bytes(), last.to_v6().to_bytes(), flags);
+		}
+#endif
+		else
+			TORRENT_ASSERT(false);
+	}
 
-        hasher();
-        hasher(const char* data, int len);
+	int ip_filter::access(address const& addr) const
+	{
+		if (addr.is_v4())
+			return m_filter4.access(addr.to_v4().to_bytes());
+#if TORRENT_USE_IPV6
+		TORRENT_ASSERT(addr.is_v6());
+		return m_filter6.access(addr.to_v6().to_bytes());
+#else
+		return 0;
+#endif
+	}
 
-        void update(std::string const& data) { update(data.c_str(), data.size()); }
-        void update(const char* data, int len);
-        sha1_hash final();
+	ip_filter::filter_tuple_t ip_filter::export_filter() const
+	{
+#if TORRENT_USE_IPV6
+		return boost::make_tuple(m_filter4.export_filter<address_v4>()
+			, m_filter6.export_filter<address_v6>());
+#else
+		return m_filter4.export_filter<address_v4>();
+#endif
+	}
+	
+	void port_filter::add_rule(boost::uint16_t first, boost::uint16_t last, int flags)
+	{
+		m_filter.add_rule(first, last, flags);
+	}
 
-        void reset();
-
-    private:
-
-        SHA_CTX m_context;
-    };
+	int port_filter::access(boost::uint16_t port) const
+	{
+		return m_filter.access(port);
+	}
+/*
+	void ip_filter::print() const
+	{
+		for (range_t::iterator i =  m_access_list.begin(); i != m_access_list.end(); ++i)
+		{
+			std::cout << i->start.as_string() << " " << i->access << "\n";
+		}
+	}
+*/
 }
-
-#endif // TORRENT_HASHER_HPP_INCLUDED
 

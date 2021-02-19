@@ -30,40 +30,23 @@ POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#ifndef TORRENT_HASHER_HPP_INCLUDED
-#define TORRENT_HASHER_HPP_INCLUDED
+#include "libtorrent/pch.hpp"
 
-#include <boost/cstdint.hpp>
+#include <numeric>
+#include <algorithm>
 
-#include "libtorrent/peer_id.hpp"
-#include "libtorrent/config.hpp"
-#include "libtorrent/assert.hpp"
+#include "libtorrent/stat.hpp"
 
-extern "C"
+namespace libtorrent {
+
+void stat_channel::second_tick(int tick_interval_ms)
 {
-#include <openssl/sha.h>
+	int sample = int(size_type(m_counter) * 1000 / tick_interval_ms);
+	TORRENT_ASSERT(sample >= 0);
+	m_5_sec_average = size_type(m_5_sec_average) * 4 / 5 + sample / 5;
+	m_30_sec_average = size_type(m_30_sec_average) * 29 / 30 + sample / 30;
+	m_counter = 0;
 }
 
-namespace libtorrent
-{
-    class TORRENT_EXTRA_EXPORT hasher
-    {
-    public:
-
-        hasher();
-        hasher(const char* data, int len);
-
-        void update(std::string const& data) { update(data.c_str(), data.size()); }
-        void update(const char* data, int len);
-        sha1_hash final();
-
-        void reset();
-
-    private:
-
-        SHA_CTX m_context;
-    };
 }
-
-#endif // TORRENT_HASHER_HPP_INCLUDED
 

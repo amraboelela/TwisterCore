@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2003-2012, Arvid Norberg
+Copyright (c) 2011-2012, Arvid Norberg
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -30,40 +30,33 @@ POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#ifndef TORRENT_HASHER_HPP_INCLUDED
-#define TORRENT_HASHER_HPP_INCLUDED
-
-#include <boost/cstdint.hpp>
-
-#include "libtorrent/peer_id.hpp"
-#include "libtorrent/config.hpp"
-#include "libtorrent/assert.hpp"
-
-extern "C"
-{
-#include <openssl/sha.h>
-}
+#include "libtorrent/random.hpp"
 
 namespace libtorrent
 {
-    class TORRENT_EXTRA_EXPORT hasher
-    {
-    public:
 
-        hasher();
-        hasher(const char* data, int len);
+	namespace
+	{
+		boost::uint32_t x = 123456789;
+	}
 
-        void update(std::string const& data) { update(data.c_str(), data.size()); }
-        void update(const char* data, int len);
-        sha1_hash final();
+	void random_seed(boost::uint32_t v)
+	{
+		x = v;
+	}
 
-        void reset();
+	// this is an xorshift random number generator
+	// see: http://en.wikipedia.org/wiki/Xorshift
+	boost::uint32_t random()
+	{
+		static boost::uint32_t y = 362436069;
+		static boost::uint32_t z = 521288629;
+		static boost::uint32_t w = 88675123;
+		boost::uint32_t t;
 
-    private:
-
-        SHA_CTX m_context;
-    };
+		t = x ^ (x << 11);
+		x = y; y = z; z = w;
+		return w = w ^ (w >> 19) ^ (t ^ (t >> 8));
+	}
 }
-
-#endif // TORRENT_HASHER_HPP_INCLUDED
 

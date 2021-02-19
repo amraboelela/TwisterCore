@@ -30,40 +30,40 @@ POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#ifndef TORRENT_HASHER_HPP_INCLUDED
-#define TORRENT_HASHER_HPP_INCLUDED
-
-#include <boost/cstdint.hpp>
-
-#include "libtorrent/peer_id.hpp"
-#include "libtorrent/config.hpp"
-#include "libtorrent/assert.hpp"
-
-extern "C"
-{
-#include <openssl/sha.h>
-}
+#include "libtorrent/hasher.hpp"
 
 namespace libtorrent
 {
-    class TORRENT_EXTRA_EXPORT hasher
-    {
-    public:
+	hasher::hasher()
+	{
+		SHA1_Init(&m_context);
+	}
 
-        hasher();
-        hasher(const char* data, int len);
+	hasher::hasher(const char* data, int len)
+	{
+		TORRENT_ASSERT(data != 0);
+		TORRENT_ASSERT(len > 0);
+		SHA1_Init(&m_context);
+		SHA1_Update(&m_context, reinterpret_cast<unsigned char const*>(data), len);
+	}
 
-        void update(std::string const& data) { update(data.c_str(), data.size()); }
-        void update(const char* data, int len);
-        sha1_hash final();
+	void hasher::update(const char* data, int len)
+	{
+		TORRENT_ASSERT(data != 0);
+		TORRENT_ASSERT(len > 0);
+		SHA1_Update(&m_context, reinterpret_cast<unsigned char const*>(data), len);
+	}
 
-        void reset();
+	sha1_hash hasher::final()
+	{
+		sha1_hash digest;
+		SHA1_Final(digest.begin(), &m_context);
+		return digest;
+	}
 
-    private:
-
-        SHA_CTX m_context;
-    };
+	void hasher::reset()
+	{
+		SHA1_Init(&m_context);
+	}
 }
-
-#endif // TORRENT_HASHER_HPP_INCLUDED
 
