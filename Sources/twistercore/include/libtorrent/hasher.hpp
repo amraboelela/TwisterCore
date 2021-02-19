@@ -41,7 +41,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 extern "C"
 {
-#include <openssl/sha.h>
+//#include <openssl/sha.h>
 }
 
 namespace libtorrent
@@ -61,7 +61,7 @@ namespace libtorrent
 
 	private:
 
-		SHA_CTX m_context;
+		//SHA_CTX m_context;
 	};
 }
 

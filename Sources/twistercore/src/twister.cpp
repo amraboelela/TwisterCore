@@ -36,14 +36,14 @@ twister::twister()
 #include "libtorrent/alert_types.hpp"
 
 #define TORRENT_DISABLE_GEO_IP
-#include "libtorrent/aux_/session_impl.hpp"
+//#include "libtorrent/aux_/session_impl.hpp"
 
 #define DEBUG_ACCEPT_POST 1
 //#define DEBUG_EXPIRE_DHT_ITEM 1
 //#define DEBUG_MAINTAIN_DHT_NODES 1
 //#define DEBUG_NEIGHBOR_TORRENT 1
 
-using namespace libtorrent;
+/*using namespace libtorrent;
 static boost::shared_ptr<session> m_ses;
 static bool m_shuttingDownSession = false;
 static bool m_usingProxy;
@@ -84,6 +84,7 @@ const double hashtagAgingFactor   = pow(0.5, hashtagTimerInterval/hashtagHalfLif
 const double hashtagCriticalValue = pow(0.5, hashtagExpiration/hashtagHalfLife);
 
 const char*  msgTokensDelimiter  = " \n\t.,:/?!;'\"()[]{}*";
+*/
 
 class SimpleThreadCounter {
 public:
@@ -108,6 +109,7 @@ private:
 #define GLOBAL_DATA_FILE "global_data"
 #define GROUP_DATA_FILE "group_data"
 
+/*
 void dhtgetMapAdd(sha1_hash &ih, alert_manager *am)
 {
     LOCK(cs_dhtgetMap);
@@ -149,10 +151,10 @@ torrent_handle startTorrentUser(std::string const &username, bool following, int
 
     LOCK(cs_twister);
     if( m_peekTorrent.count(username) ) {
-        /* multiple paralel peek piece operations per torrent not
-         * currently supported. return invalid handle for subsequent
-         * requests, until current operation completes and torrent
-         * is freed. */
+        // multiple paralel peek piece operations per torrent not
+        // currently supported. return invalid handle for subsequent
+        // requests, until current operation completes and torrent
+        // is freed.
          return torrent_handle();
     }
 
@@ -1354,11 +1356,6 @@ bool processReceivedDM(lazy_entry const* post)
                 std::string textOut;
                 if( key.Decrypt(sec, textOut) ) {
                     result = true;
-                    /* this printf is good for debug, but bad for security.
-                    printf("Received DM for user '%s' text = '%s'\n",
-                           item.second.username.c_str(),
-                           textOut.c_str());
-                    */
 
                     int64_t     utcTime = post->dict_find_int_value("time");
                     std::string from    = post->dict_find_string_value("n");
@@ -1373,7 +1370,7 @@ bool processReceivedDM(lazy_entry const* post)
                         isGroup = m_groups.count(to);
                         if( !isGroup && m_users.count(to) &&
                             !m_users.at(to).m_following.count(from) ) {
-                            /* DM not allowed from users we don't follow.*/
+                            // DM not allowed from users we don't follow.
                             printf("processReceivedDM: from '%s' to '%s' not allowed (not following)\n",
                                    from.c_str(), to.c_str());
                             break;
@@ -1388,8 +1385,8 @@ bool processReceivedDM(lazy_entry const* post)
                         if (lazy_bdecode(textOut.data(), textOut.data()+textOut.size(), v, ec, &pos) == 0
                                 && v.type() == lazy_entry::dict_t) {
 
-                            /* group_invite: register new private key and group's description.
-                             * if sent to groupalias then it is a change description request. */
+                            // group_invite: register new private key and group's description.
+                            // if sent to groupalias then it is a change description request.
                             lazy_entry const* pGroupInvite = v.dict_find_dict("group_invite");
                             if (pGroupInvite) {
                                 lazy_entry const* pDesc = pGroupInvite->dict_find_string("desc");
@@ -1402,8 +1399,8 @@ bool processReceivedDM(lazy_entry const* post)
                                 break;
                             }
 
-                            /* update group members list. we may need to start torrent for
-                             * new members to receive their chat updates */
+                            // update group members list. we may need to start torrent for
+                            // new members to receive their chat updates
                             lazy_entry const* pGroupMembers = v.dict_find_list("group_members");
                             if (pGroupMembers && isGroup) {
                                 for (int i = 0; i < pGroupMembers->list_size(); ++i) {
@@ -1681,27 +1678,24 @@ bool usernameExists(std::string const &username)
     return GetTransaction(username, txOut, hashBlock);
 }
 
-
-/*
-"userpost" :
-{
-        "n" : username,
-        "k" : seq number,
-        "t" : "post" / "dm" / "rt"
-        "msg" : message (post/rt)
-        "time" : unix utc
-        "height" : best height at user
-        "dm" : encrypted message (dm) -opt
-        "rt" : original userpost - opt
-        "sig_rt" : sig of rt - opt
-        "reply" : - opt
-        {
-                "n" : reference username
-                "k" : reference k
-        }
-}
-"sig_userpost" : signature by userpost.n
-*/
+// "userpost" :
+// {
+//        "n" : username,
+//        "k" : seq number,
+//        "t" : "post" / "dm" / "rt"
+//        "msg" : message (post/rt)
+//        "time" : unix utc
+//        "height" : best height at user
+//        "dm" : encrypted message (dm) -opt
+//        "rt" : original userpost - opt
+//        "sig_rt" : sig of rt - opt
+//        "reply" : - opt
+//        {
+//                "n" : reference username
+//                "k" : reference k
+//        }
+//}
+//"sig_userpost" : signature by userpost.n
 
 bool createSignedUserpost(entry &v, std::string const &username, int k,
                           int flag, std::string const &msg,
@@ -1800,11 +1794,11 @@ bool createDirectMessage(entry &dm, std::string const &to, std::string const &ms
 {
     CPubKey pubkey;
 
-    /* try obtaining key from wallet first */
+    // try obtaining key from wallet first
     CKeyID keyID;
     if (pwalletMain->GetKeyIdFromUsername(to, keyID) &&
         pwalletMain->GetPubKey( keyID, pubkey) ) {
-        /* success: key obtained from wallet */
+        // success: key obtained from wallet
     } else if( !getUserPubKey(to, pubkey) ) {
       printf("createDirectMessage: no pubkey for user '%s'\n", to.c_str());
       return false;
@@ -2651,7 +2645,7 @@ Value newfavmsg(const Array& params, bool fHelp)
 
     hexcapePost(v);
     return entryToJson(v);
-}
+}*/
 
 Value getposts(const Array& params, bool fHelp)
 {
@@ -2666,7 +2660,7 @@ Value getposts(const Array& params, bool fHelp)
     Array users        = params[1].get_array();
     int allowed_flags  = (params.size() > 2) ? params[2].get_int() : USERPOST_FLAG_HOME;
     int required_flags = (params.size() > 3) ? params[3].get_int() : 0;
-
+/*
     std::multimap<int64,entry> postsByTime;
 
     for( unsigned int u = 0; u < users.size(); u++ ) {
@@ -2706,10 +2700,10 @@ Value getposts(const Array& params, bool fHelp)
                 }
             }
         }
-    }
+    }*/
 
     Array ret;
-    std::multimap<int64,entry>::reverse_iterator rit;
+    /*std::multimap<int64,entry>::reverse_iterator rit;
     for (rit=postsByTime.rbegin(); rit!=postsByTime.rend() && (int)ret.size() < count; ++rit) {
         ret.push_back( entryToJson(rit->second) );
     }
@@ -2727,11 +2721,11 @@ Value getposts(const Array& params, bool fHelp)
             m_receivedSpamMsgStr = "";
             m_receivedSpamUserStr = "";
         }
-    }
-
+    }*/
     return ret;
 }
 
+/*
 Value getdirectmsgs(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 3)
@@ -2905,7 +2899,7 @@ Value getfavs(const Array& params, bool fHelp)
                     CKeyID keyID;
                     if (pwalletMain->GetKeyIdFromUsername(strUsername, keyID) &&
                         pwalletMain->GetKey( keyID, key) ) {
-                        /* success: key obtained from wallet */
+                        // success: key obtained from wallet
 
                         string textOut;
                         if (key.Decrypt(sec, textOut))
@@ -4057,7 +4051,7 @@ Value newgroupinvite(const Array& params, bool fHelp)
         membersList = m_groups.at(strGroupAlias).m_members;
     }
 
-    /* create group_invite DM and send it to each new member */
+    // create group_invite DM and send it to each new member
     for( unsigned int u = 0; u < newmembers.size(); u++ ) {
         string strMember = newmembers[u].get_str();
         membersList.insert(strMember);
@@ -4082,7 +4076,7 @@ Value newgroupinvite(const Array& params, bool fHelp)
         signAndAddDM(strFrom, k++, &dmInvite);
     }
 
-    /* create group_members DM and send it to group */
+    // create group_members DM and send it to group
     while( !membersList.empty() ) {
         entry groupMembers;
         int byteCounter = 0;
@@ -4253,8 +4247,8 @@ Value peekpost(const Array& params, bool fHelp)
             vEntry = v;
         }
     } else {
-        /* there is quite some code shared with dhtget, but it is intermigled with
-         * torrent's piece peek. so we accept a little copy-paste for now. */
+        // there is quite some code shared with dhtget, but it is intermigled with
+        // torrent's piece peek. so we accept a little copy-paste for now.
         alert_manager am(10, alert::dht_notification);
         string strResource = "post" + boost::lexical_cast<std::string>(k);
         bool multi = false;
@@ -4476,5 +4470,4 @@ Value decodeshorturl(const Array& params, bool fHelp)
     }
     return peekpost(paramsSub,false);
 }
-
-
+*/
