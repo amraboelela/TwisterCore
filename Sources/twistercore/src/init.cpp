@@ -120,7 +120,7 @@ void Shutdown()
     nTransactionsUpdated++;
     stopSessionTorrent();
     StopRPCThreads();
-    ShutdownRPCMining();
+    //ShutdownRPCMining();
     bitdb.Flush(false);
     GenerateBitcoins(false, NULL);
     StopNode();
@@ -996,7 +996,7 @@ bool AppInit2(boost::thread_group& threadGroup)
     StartNode(threadGroup);
 
     // InitRPCMining is needed here so getwork/getblocktemplate in the GUI debug console works properly.
-    InitRPCMining();
+    //InitRPCMining();
     if (fServer)
         StartRPCThreads();
 

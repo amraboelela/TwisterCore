@@ -11,12 +11,16 @@ let package = Package(
             targets: ["twistercore"])
     ],
     dependencies: [
-        .package(url: "https://github.com/amraboelela/boost", .branch("main")),
+        .package(url: "https://github.com/amraboelela/boost", .branch("master")),
         .package(url: "https://github.com/amraboelela/openssl", .branch("master")),
-        .package(url: "https://github.com/amraboelela/leveldb", .branch("main")),
+        .package(url: "https://github.com/amraboelela/leveldb", .branch("master")),
     ],
     targets: [
-        .target(name: "twistercore", dependencies: ["boost", "openssl", "leveldb", "memenv"]),
-        .target(name: "memenv", dependencies: ["leveldb"]),
+        //.target(name: "twistercore", dependencies: ["boost", "openssl", "leveldb", "memenv"]),
+        //.target(name: "memenv", dependencies: ["leveldb"]),
+        //.target(name: "SwiftTwisterCore", dependencies: ["CTwisterCore"]),
+        //.target(name: "CTwisterCore", dependencies: ["twistercore"]),
+        .target(name: "twistercore", dependencies: ["boost", "openssl", "leveldb"]),
+        //.testTarget(name: "SwiftTwisterCoreTests", dependencies: ["SwiftTwisterCore"]),
     ]
 )

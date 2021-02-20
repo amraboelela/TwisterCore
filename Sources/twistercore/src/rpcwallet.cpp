@@ -92,7 +92,7 @@ Value getinfo(const Array& params, bool fHelp)
         obj.push_back(Pair("ext_port2", GetListenPort()+LIBTORRENT_PORT_OFFSET));
     }
     {
-        LOCK(cs_main);
+        /*LOCK(cs_main);
         obj.push_back(Pair("difficulty",    (double)GetDifficulty()));
         obj.push_back(Pair("testnet",       TestNet()));
         {
@@ -101,7 +101,7 @@ Value getinfo(const Array& params, bool fHelp)
                 obj.push_back(Pair("unlocked_until", (boost::int64_t)nWalletUnlockTime));
         }
         obj.push_back(Pair("public_server_mode", GetBoolArg("-public_server_mode",false)));
-        obj.push_back(Pair("errors",        GetWarnings("statusbar")));
+        obj.push_back(Pair("errors",        GetWarnings("statusbar")));*/
     }
 
     const CNetAddr paddrPeer("8.8.8.8");

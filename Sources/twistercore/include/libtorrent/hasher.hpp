@@ -46,23 +46,23 @@ extern "C"
 
 namespace libtorrent
 {
-	class TORRENT_EXTRA_EXPORT hasher
-	{
-	public:
+    class TORRENT_EXTRA_EXPORT hasher
+    {
+    public:
 
-		hasher();
-		hasher(const char* data, int len);
+        hasher();
+        hasher(const char* data, int len);
 
-		void update(std::string const& data) { update(data.c_str(), data.size()); }
-		void update(const char* data, int len);
-		sha1_hash final();
+        void update(std::string const& data) { update(data.c_str(), data.size()); }
+        void update(const char* data, int len);
+        sha1_hash final();
 
-		void reset();
+        void reset();
 
-	private:
+    private:
 
-		SHA_CTX m_context;
-	};
+        SHA_CTX m_context;
+    };
 }
 
 #endif // TORRENT_HASHER_HPP_INCLUDED

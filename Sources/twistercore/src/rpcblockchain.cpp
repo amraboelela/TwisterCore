@@ -109,6 +109,7 @@ Value getbestblockhash(const Array& params, bool fHelp)
     return hashBestChain.GetHex();
 }
 
+/*
 Value getdifficulty(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)
@@ -117,7 +118,7 @@ Value getdifficulty(const Array& params, bool fHelp)
             "Returns the proof-of-work difficulty as a multiple of the minimum difficulty.");
 
     return GetDifficulty();
-}
+}*/
 
 
 Value getrawmempool(const Array& params, bool fHelp)

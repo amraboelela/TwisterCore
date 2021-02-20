@@ -226,7 +226,7 @@ Value stop(const Array& params, bool fHelp)
 static const CRPCCommand vRPCCommands[] =
 { //  name                      actor (function)         okSafeMode threadSafe  allowOnPublicServer
   //  ------------------------  -----------------------  ---------- ----------  -------------------
-    { "help",                   &help,                   true,      true,       true },
+    /*{ "help",                   &help,                   true,      true,       true },
     { "stop",                   &stop,                   true,      true,       false },
     { "getblockcount",          &getblockcount,          true,      false,      false },
     { "getbestblockhash",       &getbestblockhash,       true,      false,      true },
@@ -314,7 +314,7 @@ static const CRPCCommand vRPCCommands[] =
     { "usernametouid",          &usernametouid,          false,     true,       true },
     { "uidtousername",          &uidtousername,          false,     true,       true },
     { "newshorturl",            &newshorturl,            false,     true,       false },
-    { "decodeshorturl",         &decodeshorturl,         false,     true,       true },
+    { "decodeshorturl",         &decodeshorturl,         false,     true,       true },*/
 };
 
 CRPCTable::CRPCTable()
