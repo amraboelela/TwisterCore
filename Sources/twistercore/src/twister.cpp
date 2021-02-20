@@ -205,7 +205,6 @@ torrent_handle getTorrentUser(std::string const &username)
         return torrent_handle();
 }
 
-/*
 int torrentLastHave(std::string const &username)
 {
     torrent_handle h = getTorrentUser(username);
@@ -438,13 +437,13 @@ void ThreadWaitExtIP()
             break;
     }
 
-    if( generateOpt ) {
+    /*if( generateOpt ) {
         Array params;
         params.push_back( generateOpt );
         if( genproclimit > 0 )
             params.push_back( genproclimit );
         setgenerate(params, false);
-    }
+    }*/
 
     std::set<std::string> torrentsToStart;
     {
@@ -1107,7 +1106,7 @@ std::string createSignature(std::string const &strMessage, std::string const &st
     }
 
     return createSignature( strMessage, keyID );
-}*/
+}
 
 bool getUserPubKey(std::string const &strUsername, CPubKey &pubkey, int maxHeight)
 {
@@ -1895,7 +1894,6 @@ bool shouldDhtResourceExpire(std::string resource, bool multi, int height)
     return false;
 }
 
-/*
 void receivedSpamMessage(std::string const &message, std::string const &user)
 {
     LOCK(cs_spamMsg);
@@ -1961,7 +1959,7 @@ void updateSeenHashtags(std::string &message, int64_t msgTime)
             }
         }
     }
-}*/
+}
 
 entry formatSpamPost(const string &msg, const string &username, uint64_t utcTime = 0, int height = 0)
 {
@@ -3006,7 +3004,6 @@ Value getspammsg(const Array& params, bool fHelp)
     return ret;
 }
 
-/*
 Value setpreferredspamlang(const Array& params, bool fHelp)
 {
     if (fHelp || (params.size() != 1))
@@ -3130,7 +3127,7 @@ Value getlasthave(const Array& params, bool fHelp)
 
     Object ret;
     BOOST_FOREACH(string username, following) {
-        ret.push_back(Pair(username,torrentLastHave(username)));
+        ret.push_back(Pair(username, torrentLastHave(username)));
     }
 
     return ret;
@@ -3939,7 +3936,7 @@ Value creategroup(const Array& params, bool fHelp)
     registerNewGroup(privKey, strDescription, noMember, noMember, GetTime(), -1);
 
     return getGroupAliasByKey(privKey);
-}*/
+}
 
 Value listgroups(const Array& params, bool fHelp)
 {

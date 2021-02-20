@@ -8,7 +8,7 @@ let package = Package(
     products: [
         .library(
             name: "twistercore",
-            targets: ["SwiftTwisterCore"])
+            targets: ["twistercore"])
     ],
     dependencies: [
         .package(url: "https://github.com/amraboelela/boost", .branch("master")),
@@ -18,9 +18,9 @@ let package = Package(
     targets: [
         //.target(name: "twistercore", dependencies: ["boost", "openssl", "leveldb", "memenv"]),
         //.target(name: "memenv", dependencies: ["leveldb"]),
-        .target(name: "SwiftTwisterCore", dependencies: ["CTwisterCore"]),
-        .target(name: "CTwisterCore", dependencies: ["twistercore"]),
+        //.target(name: "SwiftTwisterCore", dependencies: ["CTwisterCore"]),
+        //.target(name: "CTwisterCore", dependencies: ["twistercore"]),
         .target(name: "twistercore", dependencies: ["boost", "openssl", "leveldb"]),
-        .testTarget(name: "SwiftTwisterCoreTests", dependencies: ["SwiftTwisterCore"]),
+        //.testTarget(name: "SwiftTwisterCoreTests", dependencies: ["SwiftTwisterCore"]),
     ]
 )
