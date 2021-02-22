@@ -1,5 +1,5 @@
 //
-//  TwisterCore.h
+//  TwisterCore.swift
 //  SwiftTwisterCore
 //
 //  Created by Amr Aboelela on 2/18/21.
