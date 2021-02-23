@@ -1,5 +1,5 @@
 import XCTest
-//@testable import SwiftTwisterCore
+@testable import SwiftTwisterCore
 
 final class SwiftTwisterCoreTests: XCTestCase {
     func testExample() {
